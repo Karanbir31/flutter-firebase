@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:my_firebase/authentication/controller/authentication_controller.dart';
 
@@ -39,11 +40,7 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
               ),
             ),
 
-            FractionallySizedBox(
-              widthFactor: 0.85,
-              heightFactor: 0.75,
-              child: userSignUpView(),
-            ),
+            FractionallySizedBox(widthFactor: 0.85, child: userSignUpView()),
           ],
         ),
       ),
@@ -64,8 +61,9 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
 
       child: Form(
         key: formKey,
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             spacing: 12,
@@ -73,7 +71,8 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
             children: [
               SizedBox(height: 12),
 
-              CircleAvatar(radius: 64, backgroundColor: Colors.grey),
+              applicationLogo() ??
+                  CircleAvatar(radius: 64, backgroundColor: Colors.grey),
 
               Text(
                 "Login",
@@ -100,8 +99,9 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                 child: Obx(
                   () => myInputFlied(
                     label: "Password",
-                    textController: controller.emailTextController,
+                    textController: controller.passwordTextController,
                     textInputType: TextInputType.emailAddress,
+                    shouldShowSuffixIcon: true,
                     textVisibility: controller.passwordVisibility.value,
                     validator: (value) =>
                         controller.validatePassword(password: value),
@@ -109,18 +109,22 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                 ),
               ),
 
-              myActionButton(),
+              myActionButton(
+                label: "Login",
+                onClickButton: () {
+                  if (formKey.currentState!.validate()) {
+                    controller.onClickLoginButton();
+                  }
+                },
+              ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "or login with",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w200,
-                    backgroundColor: Colors.grey[50],
-                  ),
+              Text(
+                "or login with",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w200,
+                  backgroundColor: Colors.grey[50],
                 ),
               ),
 
@@ -133,7 +137,11 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                     flex: 1,
                     child: IconButton(
                       onPressed: () {},
-                      icon: Icon(CupertinoIcons.gear),
+                      icon: SvgPicture.asset(
+                        "assets/svg/svg_google.svg",
+                        width: 32,
+                        height: 32,
+                      ),
                     ),
                   ),
 
@@ -141,7 +149,11 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                     flex: 1,
                     child: IconButton(
                       onPressed: () {},
-                      icon: Icon(CupertinoIcons.gear),
+                      icon: SvgPicture.asset(
+                        "assets/svg/svg_facebook.svg",
+                        width: 36,
+                        height: 36,
+                      ),
                     ),
                   ),
 
@@ -149,11 +161,17 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                     flex: 1,
                     child: IconButton(
                       onPressed: () {},
-                      icon: Icon(CupertinoIcons.gear),
+                      icon: SvgPicture.asset(
+                        "assets/svg/svg_twitter.svg",
+                        width: 36,
+                        height: 36,
+                      ),
                     ),
                   ),
                 ],
               ),
+
+              SizedBox(height: 16),
             ],
           ),
         ),
@@ -166,6 +184,7 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
     required TextEditingController textController,
     required TextInputType textInputType,
     required bool textVisibility,
+    bool shouldShowSuffixIcon = false,
     required String? Function(String?) validator,
   }) {
     return TextFormField(
@@ -173,15 +192,21 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
       controller: textController,
       keyboardType: textInputType,
       obscureText: textVisibility,
+      maxLength: 40,
+      maxLines: 1,
       decoration: InputDecoration(
         label: Text(label, style: TextStyle(fontSize: 14)),
-        suffixIcon: textVisibility
-            ? IconButton(
-                onPressed: controller.togglePasswordVisibility,
-                icon: Icon(
-                  controller.passwordVisibility.value
-                      ? CupertinoIcons.eye
-                      : CupertinoIcons.eye_slash,
+        suffixIcon: shouldShowSuffixIcon
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: IconButton(
+                  onPressed: controller.togglePasswordVisibility,
+                  icon: Icon(
+                    color: Colors.black,
+                    controller.passwordVisibility.value
+                        ? CupertinoIcons.eye
+                        : CupertinoIcons.eye_slash,
+                  ),
                 ),
               )
             : null,
@@ -190,19 +215,48 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
     );
   }
 
-  Widget myActionButton() {
+  Widget myActionButton({
+    required String label,
+    required void Function() onClickButton,
+  }) {
     return ElevatedButton(
-      onPressed: controller.onClickLoginButton,
+      onPressed: onClickButton,
 
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
-        textStyle: TextStyle(fontSize: 20),
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: Text("Login"),
+      child: Text(label),
+    );
+  }
+
+  Widget applicationLogo() {
+    return Container(
+      width: 84,
+      height: 84,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            Colors.lightBlue.shade200,
+            Colors.blue,
+            Colors.indigo,
+            Colors.purple,
+            Colors.deepPurpleAccent,
+          ],
+          stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+        ),
+      ),
+      child: Center(
+        child: SvgPicture.asset(
+          "assets/svg/svg_firebase.svg",
+          fit: BoxFit.fill,
+        ),
+      ),
     );
   }
 }
