@@ -12,6 +12,7 @@ buildscript {
 
         // Add Google Services plugin for Firebase
         classpath("com.google.gms:google-services:4.3.15") // latest stable
+
     }
 }
 
