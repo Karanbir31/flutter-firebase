@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_firebase/authentication/controller/authentication_binding.dart';
+import 'package:my_firebase/authentication/presentation/authentication_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,8 +15,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(body: Center(child: Text("DArat"))),
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: "/authentication",
+
+      getPages: [
+        GetPage(
+          name: "/authentication",
+          page: () => AuthenticationScreen(),
+          binding: AuthenticationBinding(),
+          transition: Transition.cupertino,
+        ),
+      ],
     );
   }
 }
