@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_firebase/authentication/controller/authentication_binding.dart';
 import 'package:my_firebase/authentication/presentation/authentication_screen.dart';
+import 'package:my_firebase/user_profile/controller/user_profile_binding.dart';
+import 'package:my_firebase/user_profile/presentation/user_profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,13 +19,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/authentication",
+      initialRoute: NavRoutes.initialRoute,
 
       getPages: [
         GetPage(
-          name: "/authentication",
+          name: NavRoutes.authenticationRoute,
           page: () => AuthenticationScreen(),
           binding: AuthenticationBinding(),
+          transition: Transition.cupertino,
+        ),
+
+        GetPage(
+          name: NavRoutes.userProfileRoute,
+          page: () => UserProfileScreen(),
+          binding: UserProfileBinding(),
           transition: Transition.cupertino,
         ),
       ],
@@ -31,20 +40,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*
-.\gradlew signingReport
+class NavRoutes {
+  static const String initialRoute = "/user_profile";
 
-
-> Task :firebase_core:signingReport
-Variant: debugAndroidTest
-Config: debug
-Store: C:\Users\Karan\.android\debug.keystore
-Alias: AndroidDebugKey
-MD5: 7F:34:DD:C8:82:D9:C2:30:9E:BD:72:8A:50:31:85:A1
-SHA1: BD:E7:B9:33:90:1F:7B:42:C1:77:13:A8:23:C5:41:88:F3:4B:B5:34
-SHA-256: 47:15:00:B4:E0:9F:21:A2:D1:4A:BD:E5:9D:11:6B:B7:43:54:68:BC:55:FE:D9:A1:5E:20:D1:86:1B:EB:00:11
-Valid until: Monday, 28 June 2055
-----------
-
-
- */
+  static const String authenticationRoute = "/authentication";
+  static const String userProfileRoute = "/user_profile";
+}

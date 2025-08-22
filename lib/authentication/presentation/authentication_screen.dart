@@ -119,61 +119,16 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
               ),
 
               Text(
-                "or login with",
+                "or Sign-in with",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w200,
-                  backgroundColor: Colors.grey[50],
+                  fontWeight: FontWeight.w300,
+                  color: Colors.deepPurple[400],
                 ),
               ),
 
               // google facebook etc auth2 row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      onPressed: () {
-                        controller.signInWithGoogle();
-                      },
-                      icon: SvgPicture.asset(
-                        "assets/svg/svg_google.svg",
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      onPressed: () {
-                        controller.signInWithFaceBook();
-                      },
-                      icon: SvgPicture.asset(
-                        "assets/svg/svg_facebook.svg",
-                        width: 36,
-                        height: 36,
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset(
-                        "assets/svg/svg_twitter.svg",
-                        width: 36,
-                        height: 36,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              socialLoginRow(controller),
 
               SizedBox(height: 16),
             ],
@@ -263,4 +218,53 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
       ),
     );
   }
+
+
+
+  // 🔹 Reusable Social Login Button
+  Widget socialLoginButton({
+    required String assetPath,
+    required double size,
+    required VoidCallback onPressed,
+  }) {
+    return Expanded(
+      flex: 1,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: SvgPicture.asset(
+          assetPath,
+          width: size,
+          height: size,
+        ),
+      ),
+    );
+  }
+
+// 🔹 Row with multiple buttons
+  Widget socialLoginRow(AuthenticationController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        socialLoginButton(
+          assetPath: "assets/svg/svg_google.svg",
+          size: 32,
+          onPressed: () => controller.signInWithGoogle(),
+        ),
+        socialLoginButton(
+          assetPath: "assets/svg/svg_facebook.svg",
+          size: 36,
+          onPressed: () => controller.signInWithFaceBook(),
+        ),
+        socialLoginButton(
+          assetPath: "assets/svg/svg_twitter.svg",
+          size: 36,
+          onPressed: () {}, // TODO: Twitter login
+        ),
+      ],
+    );
+  }
+
+
+
 }
