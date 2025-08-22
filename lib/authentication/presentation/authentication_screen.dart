@@ -136,7 +136,9 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                   Expanded(
                     flex: 1,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.signInWithGoogle();
+                      },
                       icon: SvgPicture.asset(
                         "assets/svg/svg_google.svg",
                         width: 32,
@@ -148,7 +150,9 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
                   Expanded(
                     flex: 1,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.signInWithFaceBook();
+                      },
                       icon: SvgPicture.asset(
                         "assets/svg/svg_facebook.svg",
                         width: 36,

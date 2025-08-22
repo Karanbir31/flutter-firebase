@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_firebase/authentication/controller/google_auth_service.dart';
+
+import 'facebook_auth_service.dart';
 
 class AuthenticationController extends GetxController {
   final emailTextController = TextEditingController();
@@ -83,14 +88,32 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  Future loginUserWithGoogleAccount() async {
+  void signInWithGoogle() async {
+    GoogleAuthService myAuthService = GoogleAuthService();
+
+    UserCredential? userCredential = await myAuthService
+        .signInWithGoogleFirebase();
+
+    if (userCredential != null) {
+      debugPrint(
+        ""
+        "4"
+        "${userCredential.user}",
+      );
+      mySnackBar(
+        title: "Google Sign in Successful",
+        message: "Userdata -- ${userCredential.user?.email} ",
+      );
+    }
+  }
+
+  Future<void> signInWithFaceBook() async {
     try {
+      FacebookAuthService.loginWithFacebook();
 
-
-    } on FirebaseAuthException catch (e) {
-      debugPrint("FirebaseAuthException: ${e.code} - ${e.message}");
     } catch (error) {
-      debugPrint("Error in loginUserWithGoogleAccount -- $error");
+      debugPrint("after facebook login failed -->> $error");
+      mySnackBar(title: "facebook login failed", message: " ");
     }
   }
 

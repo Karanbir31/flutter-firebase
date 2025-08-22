@@ -48,3 +48,9 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation ("com.facebook.android:facebook-android-sdk:16.2.0")
+
+    // other dependencies
+}

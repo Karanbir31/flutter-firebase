@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">my_firebase</string>
+
+    <!-- Facebook keys -->
+    <string name="facebook_app_id">2609816396042911</string>
+    <string name="facebook_client_token">2c7308b6ee299aaccbaabc38d52b108e</string>
+</resources>
