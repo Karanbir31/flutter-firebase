@@ -8,10 +8,8 @@ class MyTasksScreen extends GetView<MyTasksController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text("All Tasks"),
+        title: const Text("My Tasks"),
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
@@ -25,41 +23,29 @@ class MyTasksScreen extends GetView<MyTasksController> {
         child: Icon(Icons.add),
       ),
 
-      body: Obx(
-        () => SafeArea(
-          child: controller.myTasks.value.length <= 0
-              ? Center(
-                  child: MaterialButton(
-                    onPressed: () {
-                      controller.navigateToTaskUpdate(task: null);
-                    },
-                    child: Text("Add a task"),
-                  ),
-                )
-              : myTasksUi(context),
-        ),
-      ),
-    );
-  }
+      body: Obx(() {
+        if (controller.myTasks.isEmpty) {
+          return const Center(child: Text("No tasks found"));
+        }
 
-  Widget myTasksUi(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        var currTask = controller.myTasks.value[index];
-
-        return ListTile(
-          title: Text(currTask.title),
-          subtitle: Text(currTask.description),
-
-          onTap: () {
-            controller.navigateToTaskDetails(task: currTask);
+        return ListView.builder(
+          itemCount: controller.myTasks.length,
+          itemBuilder: (context, index) {
+            final task = controller.myTasks[index];
+            return ListTile(
+              title: Text(task.title),
+              subtitle: Text(task.description),
+              trailing: IconButton(
+                onPressed: () {
+                  controller.deleteTask(taskId: task.id);
+                },
+                icon: Icon(Icons.delete),
+              ),
+              onTap: () => controller.navigateToTaskUpdate(task: task),
+            );
           },
-
-          titleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          subtitleTextStyle: TextStyle(fontSize: 16),
         );
-      },
-      itemCount: 10,
+      }),
     );
   }
 }

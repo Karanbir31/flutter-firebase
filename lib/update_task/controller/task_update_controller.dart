@@ -15,7 +15,7 @@ class TaskUpdateController extends GetxController {
   late final firebaseDatabase = FirebaseDatabase.instanceFor(
     app: firebaseApp,
     databaseURL:
-    "https://clgproject-9bcab-default-rtdb.asia-southeast1.firebasedatabase.app/",
+        "https://clgproject-9bcab-default-rtdb.asia-southeast1.firebasedatabase.app/",
   );
 
   final String userAuthId = FirebaseAuth.instance.currentUser?.uid ?? "user_id";
@@ -34,6 +34,8 @@ class TaskUpdateController extends GetxController {
     } else {
       await _updateTask();
     }
+
+    Get.back(result: "OK");
   }
 
   /// Private: Add new task
