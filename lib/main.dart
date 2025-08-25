@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_firebase/authentication/controller/authentication_binding.dart';
 import 'package:my_firebase/authentication/presentation/authentication_screen.dart';
+import 'package:my_firebase/splash_screen/splash_screen.dart';
+import 'package:my_firebase/task_details/controller/task_details_binding.dart';
+import 'package:my_firebase/task_details/presentation/task_details_screen.dart';
+import 'package:my_firebase/task_list/controller/my_tasks_binding.dart';
+import 'package:my_firebase/task_list/presentation/my_tasks.dart';
+import 'package:my_firebase/update_task/controller/task_update_binding.dart';
+import 'package:my_firebase/update_task/presentation/task_update_screen.dart';
 import 'package:my_firebase/user_profile/controller/user_profile_binding.dart';
 import 'package:my_firebase/user_profile/presentation/user_profile_screen.dart';
 
@@ -23,6 +30,12 @@ class MyApp extends StatelessWidget {
 
       getPages: [
         GetPage(
+          name: NavRoutes.splashScreenRoute,
+          page: () => SplashScreen(),
+
+          transition: Transition.cupertino,
+        ),
+        GetPage(
           name: NavRoutes.authenticationRoute,
           page: () => AuthenticationScreen(),
           binding: AuthenticationBinding(),
@@ -35,14 +48,41 @@ class MyApp extends StatelessWidget {
           binding: UserProfileBinding(),
           transition: Transition.cupertino,
         ),
+
+        GetPage(
+          name: NavRoutes.myTasksRoute,
+          page: () => MyTasksScreen(),
+          binding: MyTasksBinding(),
+          transition: Transition.cupertino,
+        ),
+
+        GetPage(
+          name: NavRoutes.taskUpdateRoute,
+          page: () => TaskUpdateScreen(),
+          binding: TaskUpdateBinding(),
+          transition: Transition.cupertino,
+        ),
+
+        GetPage(
+          name: NavRoutes.taskDetailsRoute,
+          page: () => TaskDetailsScreen(),
+          binding: TaskDetailsBinding(),
+          transition: Transition.cupertino,
+        ),
       ],
     );
   }
 }
 
 class NavRoutes {
-  static const String initialRoute = "/user_profile";
+  static const String initialRoute = "/my_tasks";
+
+  static const String splashScreenRoute = "/splash_screen";
 
   static const String authenticationRoute = "/authentication";
   static const String userProfileRoute = "/user_profile";
+
+  static const String myTasksRoute = "/my_tasks";
+  static const String taskDetailsRoute = "/task_details";
+  static const String taskUpdateRoute = "/task_update";
 }
