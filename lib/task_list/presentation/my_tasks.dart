@@ -10,10 +10,18 @@ class MyTasksScreen extends GetView<MyTasksController> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text("All Tasks")),
+      appBar: AppBar(
+        title: Text("All Tasks"),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: controller.addNewTask,
+        onPressed: () {
+          controller.navigateToTaskUpdate(task: null);
+        },
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
         child: Icon(Icons.add),
       ),
 
@@ -22,16 +30,13 @@ class MyTasksScreen extends GetView<MyTasksController> {
           child: controller.myTasks.value.length <= 0
               ? Center(
                   child: MaterialButton(
-                    onPressed: controller.addNewTask,
+                    onPressed: () {
+                      controller.navigateToTaskUpdate(task: null);
+                    },
                     child: Text("Add a task"),
                   ),
                 )
-              : Center(
-                  child: MaterialButton(
-                    onPressed: controller.addNewTask,
-                    child: Text("show tasks"),
-                  ),
-                ),
+              : myTasksUi(context),
         ),
       ),
     );
@@ -46,7 +51,9 @@ class MyTasksScreen extends GetView<MyTasksController> {
           title: Text(currTask.title),
           subtitle: Text(currTask.description),
 
-          onTap: () {},
+          onTap: () {
+            controller.navigateToTaskDetails(task: currTask);
+          },
 
           titleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           subtitleTextStyle: TextStyle(fontSize: 16),
