@@ -15,25 +15,29 @@ class TaskUpdateScreen extends GetView<TaskUpdateController> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: true,
-
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
         actions: [
-          IconButton(onPressed: controller.saveTask, icon: Icon(Icons.done)),
+          IconButton(
+            onPressed: controller.saveTask,
+            icon: const Icon(Icons.done),
+          ),
         ],
       ),
 
-      body: Center(
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 16,
+            spacing: 12,
+
             children: [
+              // Title Field
               inputTextField(
                 label: "Title",
                 controller: controller.titleController,
@@ -42,12 +46,38 @@ class TaskUpdateScreen extends GetView<TaskUpdateController> {
                 maxLines: 4,
               ),
 
+              // Description Field (expands to fill remaining space)
               Flexible(
-                flex: 1,
                 child: inputTextField(
                   label: "Description",
                   controller: controller.descriptionController,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
+                  minLines: null,
+                  maxLines: null,
+                  expands: true,
+                ),
+              ),
+
+              FractionallySizedBox(
+                widthFactor: 0.8,
+                alignment: AlignmentGeometry.center,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    padding: EdgeInsets.all(16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      ), // <-- round corners
+                    ),
+                  ),
+                  onPressed: controller.saveTask,
+                  child: Text("Save"),
                 ),
               ),
             ],
@@ -63,13 +93,13 @@ class TaskUpdateScreen extends GetView<TaskUpdateController> {
     required TextInputType keyboardType,
     int? maxLines,
     int? minLines,
+    bool expands = false,
   }) {
     return TextFormField(
       controller: controller,
-
       minLines: minLines,
       maxLines: maxLines,
-
+      expands: expands,
       validator: (value) {
         if (value != null && value.isNotEmpty) {
           return null;
@@ -78,8 +108,11 @@ class TaskUpdateScreen extends GetView<TaskUpdateController> {
       },
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        label: Text(label),
-        border: OutlineInputBorder(),
+        hint: Text(label),
+        border: InputBorder.none,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
     );
   }

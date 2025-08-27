@@ -32,16 +32,31 @@ class MyTasksScreen extends GetView<MyTasksController> {
           itemCount: controller.myTasks.length,
           itemBuilder: (context, index) {
             final task = controller.myTasks[index];
-            return ListTile(
-              title: Text(task.title),
-              subtitle: Text(task.description),
-              trailing: IconButton(
-                onPressed: () {
-                  controller.deleteTask(taskId: task.id);
-                },
-                icon: Icon(Icons.delete),
+            return Card(
+              color: Colors.lightBlue[50],
+              clipBehavior: Clip.antiAlias,
+              margin: EdgeInsets.all(8),
+              elevation: 4,
+              shadowColor: Colors.grey,
+
+              child: ListTile(
+                title: Text(task.title, maxLines: 2, ),
+                subtitle: Text(task.description, maxLines: 5),
+                titleTextStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                subtitleTextStyle: TextStyle(fontSize: 20, color: Colors.black),
+
+                trailing: IconButton(
+                  onPressed: () {
+                    controller.deleteTask(taskId: task.id);
+                  },
+                  icon: Icon(Icons.delete),
+                ),
+                onTap: () => controller.navigateToTaskUpdate(task: task),
               ),
-              onTap: () => controller.navigateToTaskUpdate(task: task),
             );
           },
         );
